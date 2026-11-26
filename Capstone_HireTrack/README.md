@@ -9,7 +9,7 @@ There are three roles:
 |---|---|
 | **HR** | Create/edit/close jobs, create candidate profiles, add and activate panel members, schedule L1/L2 interviews (1–2 panel members), read all feedback, move candidates to the next stage, reject at any stage, make the final decision with comments, search and filter candidates |
 | **Panel member** | See only their assigned interviews: candidate profile, resume, JD and focus areas. Submit feedback once (comments, strengths, weaknesses, areas covered, rating 1–5, Selected/Rejected) |
-| **Candidate** | Register and verify email, apply to **one** job with a PDF resume, track their stage, status and interview schedule (never the panel feedback) |
+| **Candidate** | Register (logged in straight away, no verification email), apply to **one** job with a PDF resume, track their stage, status and interview schedule (never the panel feedback) |
 
 ---
 
@@ -174,20 +174,20 @@ Adds a **Continue with Google** button to the login and register pages.
 4. Copy the **Client ID** (ends with `.apps.googleusercontent.com`) into `backend/.env`:
    `GOOGLE_CLIENT_ID="....apps.googleusercontent.com"`, then restart the server.
 
-Rules: candidates can sign up with Google straight away (no password or verification email).
+Rules: candidates can sign up with Google straight away (no password needed).
 HR and panel members can use Google only with the email HR already added; nobody becomes HR by
 signing in with Google. The Client ID is not a secret; no Client Secret is needed.
 
 ### Account emails
 Every email starts with "Dear {name}," and ends with "Warm regards, HR Team":
-verification, candidate account created, interview scheduled, application updates
+candidate account created by HR, password reset, interview scheduled, application updates
 (with a kind message for selected / not selected), panel welcome + login details, and
 new interview assigned (to the panel member).
 
 ## Try the full flow
 
 1. Log in as HR (the seed email and password) and create a job on **Jobs**.
-2. Open the homepage in a private window, click **Register**, then open the verification email and log in.
+2. Open the homepage in a private window, click **Register**; you are logged in straight away.
 3. Click **Apply** on the job and fill in the form with a PDF resume. The status becomes *Profiling Completed*.
 4. As HR, go to **Panels**, add two panel members and click **Activate & email login**. Each gets a
    welcome email with their login email and a temporary password. On their first login they must
@@ -222,10 +222,9 @@ Base URL `/api`. Protected routes need the header `Authorization: Bearer <token>
 
 | Method | Endpoint | Who |
 |---|---|---|
-| POST | `/auth/register`, `/auth/login`, `/auth/set-password` | Public |
+| POST | `/auth/register` (returns login token), `/auth/login`, `/auth/set-password`, `/auth/forgot-password` | Public |
 | POST | `/auth/google` (Google sign-in token) · GET `/auth/config` | Public |
 | GET / POST | `/auth/account`, `/auth/change-password` | Any logged-in user |
-| GET | `/auth/verify-email?token=` | Public (email link) |
 | GET | `/jobs`, `/jobs/:id` | Public |
 | GET | `/jobs/all` | HR |
 | POST / PUT | `/jobs`, `/jobs/:id` | HR |
@@ -255,7 +254,7 @@ Base URL `/api`. Protected routes need the header `Authorization: Bearer <token>
 ## Known limits / next steps
 - Resumes are saved in `backend/uploads/` (never public; served only to allowed users).
   The SRS mentions "drive". If that means Google Drive, only `upload.js` and `getResumePath()` need to change.
-- Ideas for later: rate-limit the login route, add a "resend verification email" button.
+- Ideas for later: rate-limit the login route.
 
 ---
 

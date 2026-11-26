@@ -1,6 +1,5 @@
 jest.mock('../src/config/prisma', () => require('./mockPrisma')());
 jest.mock('../src/services/emailService', () => ({
-  sendVerification: jest.fn(),
   sendPasswordReset: jest.fn(),
 }));
 
@@ -21,41 +20,31 @@ describe('registerCandidate', () => {
     expect(prisma.user.create).not.toHaveBeenCalled();
   });
 
-  test('saves a hashed password and sends a verification email', async () => {
+  test('creates the candidate and logs them in straight away (no email)', async () => {
     prisma.user.findUnique.mockResolvedValue(null);
-    prisma.user.create.mockResolvedValue({ id: 5, email: input.email });
+    prisma.user.create.mockImplementation(({ data }) => Promise.resolve({ id: 5, ...data }));
 
     const result = await authService.registerCandidate(input);
 
     const saved = prisma.user.create.mock.calls[0][0].data;
     expect(saved.role).toBe('CANDIDATE');
+    expect(saved.isVerified).toBe(true);
     expect(saved.passwordHash).not.toBe('secret123');
     expect(await bcrypt.compare('secret123', saved.passwordHash)).toBe(true);
-    expect(saved.tokenHash).toHaveLength(64);
-    expect(emailService.sendVerification).toHaveBeenCalledWith(
-      input.email,
-      'Riya Sharma',
-      expect.any(String),
-    );
-    expect(result).toEqual({ id: 5, email: input.email });
+    expect(jwt.verify(result.token, process.env.JWT_SECRET)).toMatchObject({
+      sub: '5',
+      role: 'CANDIDATE',
+    });
+    expect(result.user).toMatchObject({ id: 5, email: input.email, role: 'CANDIDATE' });
+    expect(emailService.sendPasswordReset).not.toHaveBeenCalled();
   });
 });
 
-describe('verifyEmail and setPassword', () => {
-  test('reject an unknown or expired link', async () => {
+describe('setPassword (emailed link)', () => {
+  test('rejects an unknown or expired link', async () => {
     prisma.user.findFirst.mockResolvedValue(null);
-    await expect(authService.verifyEmail('bad-token')).rejects.toMatchObject({ status: 400 });
     await expect(authService.setPassword('bad-token', 'newpass123')).rejects.toMatchObject({
       status: 400,
-    });
-  });
-
-  test('verifyEmail marks the user verified and clears the token', async () => {
-    prisma.user.findFirst.mockResolvedValue({ id: 3 });
-    await authService.verifyEmail('good-token');
-    expect(prisma.user.update).toHaveBeenCalledWith({
-      where: { id: 3 },
-      data: { isVerified: true, tokenHash: null, tokenExpiresAt: null },
     });
   });
 
@@ -104,11 +93,11 @@ describe('login', () => {
     ).rejects.toMatchObject({ status: 401 });
   });
 
-  test('unverified email gives 403', async () => {
+  test('an older account that never verified its email can still log in', async () => {
     prisma.user.findUnique.mockResolvedValue({ ...user, isVerified: false });
     await expect(
       authService.login({ email: user.email, password: 'correct-pass' }),
-    ).rejects.toThrow('verify your email');
+    ).resolves.toHaveProperty('token');
   });
 
   test('inactive account gives 403', async () => {
@@ -257,47 +246,6 @@ describe('requestPasswordReset (forgot password)', () => {
     );
     await authService.requestPasswordReset('riya@example.com');
     expect(emailService.sendPasswordReset).toHaveBeenCalled();
-  });
-});
-
-describe('resendVerification', () => {
-  const HOUR = 60 * 60 * 1000;
-  const unverified = (extra = {}) => ({
-    id: 6,
-    email: 'neha@example.com',
-    fullName: 'Neha',
-    role: 'CANDIDATE',
-    isVerified: false,
-    passwordHash: 'hash',
-    tokenExpiresAt: new Date(Date.now() + 10 * HOUR), // old link sent 14 hours ago
-    ...extra,
-  });
-
-  test('sends a new 24-hour verification link', async () => {
-    prisma.user.findUnique.mockResolvedValue(unverified());
-    await authService.resendVerification('neha@example.com');
-    const { data } = prisma.user.update.mock.calls[0][0];
-    expect(emailService.sendVerification).toHaveBeenCalledWith(
-      'neha@example.com',
-      'Neha',
-      expect.any(String),
-    );
-    expect(data.tokenExpiresAt.getTime() - Date.now()).toBeGreaterThan(23.9 * HOUR);
-  });
-
-  test.each([
-    ['unknown email', null],
-    ['already verified', { isVerified: true }],
-    ['HR / panel accounts', { role: 'PANEL' }],
-    ['account created by HR (uses set-password link)', { passwordHash: null }],
-    [
-      'link sent less than 2 minutes ago',
-      { tokenExpiresAt: new Date(Date.now() + 24 * HOUR - 30000) },
-    ],
-  ])('does nothing for %s', async (_label, extra) => {
-    prisma.user.findUnique.mockResolvedValue(extra === null ? null : unverified(extra));
-    await authService.resendVerification('neha@example.com');
-    expect(emailService.sendVerification).not.toHaveBeenCalled();
   });
 });
 

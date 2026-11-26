@@ -25,20 +25,20 @@ form.addEventListener('submit', async (event) => {
   if (!form.reportValidity()) return;
   const data = Object.fromEntries(new FormData(form));
   try {
-    await withBusy(form.querySelector('[type=submit]'), () =>
+    // The new account is logged in straight away (no verification email)
+    const result = await withBusy(form.querySelector('[type=submit]'), () =>
       api('/auth/register', { method: 'POST', body: data }),
     );
-    document.getElementById('sentTo').textContent = data.email;
-    document.getElementById('doneIcon').innerHTML = icon('check', 'size-7');
-    document.getElementById('registerBox').hidden = true;
-    document.getElementById('doneBox').hidden = false;
+    goHome(result);
   } catch (err) {
     showError(err, form);
   }
 });
 
-// Google sign-up: account is created and verified straight away
-renderGoogleButton((result) => {
+function goHome(result) {
   saveLogin(result);
   window.location.href = HOME_FOR_ROLE[result.user.role];
-});
+}
+
+// Google sign-up works the same way
+renderGoogleButton(goHome);

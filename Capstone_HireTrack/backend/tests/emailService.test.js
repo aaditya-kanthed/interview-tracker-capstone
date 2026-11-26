@@ -29,8 +29,8 @@ describe('emails', () => {
     expect(html).toContain('1 hour');
   });
 
-  test('verification email greets the candidate by name and signs off from HR', async () => {
-    await emailService.sendVerification('a@example.com', 'Riya Sharma', 'tok123');
+  test('emails greet the person by name and sign off from HR', async () => {
+    await emailService.sendSetPassword('a@example.com', 'Riya Sharma', 'tok123');
     expect(lastMail().html).toContain('Dear Riya Sharma,');
     expect(lastMail().html).toContain('Warm regards');
     expect(lastMail().text).toContain('Dear Riya Sharma,');
@@ -69,12 +69,11 @@ describe('emails', () => {
     expect(lastMail().html).toContain('Thank you for the time');
   });
 
-  test('verification email has a button with the verify link and a plain-text copy', async () => {
-    await emailService.sendVerification('a@example.com', 'Riya', 'tok123');
+  test('emails have a button link and a plain-text copy', async () => {
+    await emailService.sendPasswordReset('a@example.com', 'Riya', 'tok123');
     expect(lastMail().to).toBe('a@example.com');
-    expect(lastMail().html).toContain('/api/auth/verify-email?token=tok123');
-    expect(lastMail().html).toContain('Verify email');
-    expect(lastMail().text).toContain('/api/auth/verify-email?token=tok123');
+    expect(lastMail().html).toContain('Reset my password');
+    expect(lastMail().text).toContain('/set-password.html?token=tok123&reset=1');
     expect(lastMail().text).not.toContain('<');
   });
 
@@ -153,7 +152,7 @@ describe('emails', () => {
 
   test('a failed email returns false and does not throw', async () => {
     mockSendMail.mockRejectedValue(new Error('SMTP down'));
-    await expect(emailService.sendVerification('a@example.com', 'A', 't')).resolves.toBe(false);
+    await expect(emailService.sendPasswordReset('a@example.com', 'A', 't')).resolves.toBe(false);
   });
 });
 

@@ -10,23 +10,21 @@ const emailService = require('./emailService');
 
 const CLEAR_TOKEN = { tokenHash: null, tokenExpiresAt: null };
 
+// Candidate sign-up: no verification email; the new candidate is logged in straight away
 async function registerCandidate({ fullName, email, password }) {
   const existing = await prisma.user.findUnique({ where: { email } });
   if (existing) throw AppError.conflict('An account with this email already exists');
 
-  const { token, tokenHash, tokenExpiresAt } = createOneTimeToken();
   const user = await prisma.user.create({
     data: {
       fullName,
       email,
       role: ROLES.CANDIDATE,
       passwordHash: await bcrypt.hash(password, 10),
-      tokenHash,
-      tokenExpiresAt,
+      isVerified: true,
     },
   });
-  await emailService.sendVerification(email, fullName, token);
-  return { id: user.id, email: user.email };
+  return issueLogin(user);
 }
 
 async function findUserByToken(token) {
@@ -35,11 +33,6 @@ async function findUserByToken(token) {
   });
   if (!user) throw AppError.badRequest('This link is invalid or has expired');
   return user;
-}
-
-async function verifyEmail(token) {
-  const user = await findUserByToken(token);
-  await prisma.user.update({ where: { id: user.id }, data: { isVerified: true, ...CLEAR_TOKEN } });
 }
 
 // Used by panel members (and candidates created by HR) from the emailed link
@@ -76,25 +69,6 @@ async function requestPasswordReset(email) {
   const { token, tokenHash, tokenExpiresAt } = createOneTimeToken(RESET_LINK_VALID_MS);
   await prisma.user.update({ where: { id: user.id }, data: { tokenHash, tokenExpiresAt } });
   await emailService.sendPasswordReset(user.email, user.fullName, token);
-}
-
-// ---------- Resend verification email ----------
-const VERIFY_LINK_VALID_MS = 24 * 60 * 60 * 1000; // 24 hours
-
-// For candidates who registered but lost (or never got) the verification email.
-// Same answer for every email, so it can't be used to find registered accounts.
-async function resendVerification(email) {
-  const user = await prisma.user.findUnique({ where: { email } });
-  // Only self-registered candidates who are not verified yet
-  if (!user || user.isVerified || user.role !== ROLES.CANDIDATE || !user.passwordHash) return;
-
-  // A link sent less than 2 minutes ago is still fresh: ignore repeated clicks
-  const msLeft = user.tokenExpiresAt ? user.tokenExpiresAt.getTime() - Date.now() : 0;
-  if (msLeft > VERIFY_LINK_VALID_MS - RESEND_WAIT_MS) return;
-
-  const { token, tokenHash, tokenExpiresAt } = createOneTimeToken(VERIFY_LINK_VALID_MS);
-  await prisma.user.update({ where: { id: user.id }, data: { tokenHash, tokenExpiresAt } });
-  await emailService.sendVerification(user.email, user.fullName, token);
 }
 
 // Our own JWT + the user details the frontend needs.
@@ -151,7 +125,6 @@ async function login({ email, password }) {
   const user = await prisma.user.findUnique({ where: { email } });
   const ok = user?.passwordHash && (await bcrypt.compare(password, user.passwordHash));
   if (!ok) throw AppError.unauthorized('Wrong email or password');
-  if (!user.isVerified) throw AppError.forbidden('Please verify your email first');
   if (!user.isActive) throw AppError.forbidden('Your account is not active');
   return issueLogin(user);
 }
@@ -207,10 +180,8 @@ async function loginWithGoogle(credential) {
 
 module.exports = {
   registerCandidate,
-  verifyEmail,
   setPassword,
   requestPasswordReset,
-  resendVerification,
   login,
   loginWithGoogle,
   changePassword,

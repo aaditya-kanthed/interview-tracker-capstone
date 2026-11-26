@@ -5,9 +5,9 @@ const authService = require('../services/authService');
 const { googleClientId } = require('../config/env');
 const { authenticate } = require('../middlewares/auth');
 
+// Candidate sign-up: returns a login token straight away (no verification email)
 router.post('/register', validate(s.registerSchema), async (req, res) => {
-  const user = await authService.registerCandidate(req.validated);
-  res.status(201).json({ ...user, message: 'Check your email to verify your account' });
+  res.status(201).json(await authService.registerCandidate(req.validated));
 });
 
 router.post('/login', validate(s.loginSchema), async (req, res) => {
@@ -39,12 +39,6 @@ router.get('/config', (_req, res) => {
   res.json({ googleClientId: googleClientId || null });
 });
 
-// Opened from the email link
-router.get('/verify-email', async (req, res) => {
-  await authService.verifyEmail(String(req.query.token || ''));
-  res.redirect('/login.html?verified=1');
-});
-
 router.post('/set-password', validate(s.setPasswordSchema), async (req, res) => {
   await authService.setPassword(req.validated.token, req.validated.password);
   res.json({ message: 'Password set. You can log in now.' });
@@ -55,14 +49,6 @@ router.post('/forgot-password', validate(s.forgotPasswordSchema), async (req, re
   await authService.requestPasswordReset(req.validated.email);
   res.json({
     message: 'If an account exists for this email, we have sent a link to reset the password.',
-  });
-});
-
-// "Resend verification email" (shown on the login page when the email is not verified yet)
-router.post('/resend-verification', validate(s.forgotPasswordSchema), async (req, res) => {
-  await authService.resendVerification(req.validated.email);
-  res.json({
-    message: 'If this account still needs verifying, a new verification link has been sent.',
   });
 });
 

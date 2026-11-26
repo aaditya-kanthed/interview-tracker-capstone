@@ -139,16 +139,6 @@ module.exports = {
     }),
 
   // ---------- Candidates ----------
-  sendVerification: (to, fullName, token) =>
-    sendMail(to, 'Verify your email - HireTrack', {
-      name: fullName,
-      title: 'Welcome! Please confirm your email',
-      body: `<p>Thank you for creating an account with us. We're glad you're interested in joining our team.</p>
-             <p>Please confirm your email address to activate your account. The link is valid for 24 hours.</p>`,
-      buttonText: 'Verify email',
-      buttonUrl: `${appUrl}/api/auth/verify-email?token=${token}`,
-    }),
-
   sendSetPassword: (to, fullName, token) =>
     sendMail(to, 'Your candidate account is ready - HireTrack', {
       name: fullName,
