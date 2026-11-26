@@ -1,0 +1,19 @@
+# Dependencies
+node_modules/
+
+# Secrets - never commit real passwords or keys
+.env
+.env.*
+!.env.example
+
+# Generated / runtime files
+uploads/
+logs/
+coverage/
+*.log
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
