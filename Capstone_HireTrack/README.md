@@ -1,4 +1,4 @@
-# Interview Process Tracking System
+# HireTrack – Interview Process Tracking System
 
 A web app that helps a company manage job descriptions and move candidates through
 the interview stages: **Profiling → Screening → L1 Technical → L2 Technical → HR Round**.
@@ -40,7 +40,7 @@ Other libraries: **Zod** (input validation), **jsonwebtoken** (JWT login), **bcr
 ## Folder structure
 
 ```
-Capstone_InterviewTracker/
+Capstone_HireTrack/
 ├── backend/
 │   ├── prisma/            schema.prisma (tables), migrations/, seed.js (first HR user)
 │   ├── src/
@@ -111,14 +111,14 @@ Open `.env` and set:
 ### Email setup (send from your Gmail)
 1. Turn on **2-Step Verification** for your Google account (Google Account → Security).
 2. Open <https://myaccount.google.com/apppasswords>, create an app password named
-   "Interview Tracker", and copy the 16-letter code. Gmail does **not** accept your normal password here.
+   "HireTrack", and copy the 16-letter code. Gmail does **not** accept your normal password here.
 3. In `backend/.env` set:
    ```
    SMTP_HOST="smtp.gmail.com"
    SMTP_PORT=465
    SMTP_USER="your.address@gmail.com"
    SMTP_PASS="the 16-letter app password (spaces are fine)"
-   MAIL_FROM="Interview Tracker <your.address@gmail.com>"
+   MAIL_FROM="HireTrack <your.address@gmail.com>"
    ```
 4. Check it:
    ```powershell
@@ -287,7 +287,7 @@ Base URL `/api`. Protected routes need the header `Authorization: Bearer <token>
 - Postman / REST clients, VS Code
 
 ### Resume lines you can adapt
-- Built a full-stack Interview Process Tracking System (Node.js, Express, PostgreSQL, Prisma) with role-based access for HR, interview panels and candidates.
+- Built HireTrack, a full-stack Interview Process Tracking System (Node.js, Express, PostgreSQL, Prisma) with role-based access for HR, interview panels and candidates.
 - Built a JWT-secured REST API with Zod validation, centralized error handling, PDF resume upload and SMTP email notifications.
 - Designed a responsive Tailwind CSS interface with a persistent light/dark mode switch, toasts, dialogs and a recruitment dashboard.
 - Wrote 96 Jest/Supertest tests reaching 99% code coverage; enforced code quality with ESLint and Prettier.

@@ -112,7 +112,7 @@ const NAV_FOR_ROLE = {
 function brandHtml() {
   return `<a href="index.html" class="flex items-center gap-2 font-bold text-stone-900 dark:text-white">
       <span class="grid size-9 place-items-center rounded-xl bg-brand-600 text-white">${icon('logo', 'size-5')}</span>
-      <span class="text-lg">Interview<span class="text-brand-600 dark:text-brand-400">Tracker</span></span>
+      <span class="text-lg">Hire<span class="text-brand-600 dark:text-brand-400">Track</span></span>
     </a>`;
 }
 
@@ -401,7 +401,7 @@ function renderAuthAside() {
   document.getElementById('authAside').innerHTML = `
     <div class="hidden bg-brand-700 p-12 text-white lg:flex lg:flex-col lg:justify-between dark:bg-brand-900">
       <a href="index.html" class="flex items-center gap-2 text-lg font-bold">
-        <span class="grid size-9 place-items-center rounded-xl bg-white/15">${icon('logo')}</span> InterviewTracker
+        <span class="grid size-9 place-items-center rounded-xl bg-white/15">${icon('logo')}</span> HireTrack
       </a>
       <div>
         <h2 class="text-3xl leading-tight font-bold">From application to offer, all in one place.</h2>
@@ -472,7 +472,7 @@ function renderFooter() {
   document.body.insertAdjacentHTML(
     'beforeend',
     `<footer class="mt-16 border-t border-stone-200 py-6 text-center text-xs text-stone-500 dark:border-stone-800 dark:text-stone-500">
-       Interview Process Tracking System &middot; Capstone Project
+       HireTrack &middot; Interview Process Tracking System
      </footer>`,
   );
 }

@@ -59,11 +59,11 @@ function layout({ name, title, body, buttonText, buttonUrl }) {
     ? `<p style="margin:28px 0"><a href="${buttonUrl}" style="background:#c2561d;color:#ffffff;padding:12px 22px;border-radius:8px;text-decoration:none;font-weight:600;display:inline-block">${buttonText}</a></p>
        <p style="font-size:12px;color:#78716c">If the button does not work, copy this link:<br><a href="${buttonUrl}" style="color:#c2561d;word-break:break-all">${buttonUrl}</a></p>`
     : '';
-  const signOff = `<p style="margin:24px 0 0;font-size:15px;line-height:1.6">Warm regards,<br><b>HR Team</b><br><span style="color:#78716c">InterviewTracker</span></p>`;
+  const signOff = `<p style="margin:24px 0 0;font-size:15px;line-height:1.6">Warm regards,<br><b>HR Team</b><br><span style="color:#78716c">HireTrack</span></p>`;
   return `<!doctype html><html><body style="margin:0;background:#fbf7f1;font-family:Segoe UI,Arial,sans-serif;color:#292524">
   <table width="100%" cellpadding="0" cellspacing="0" style="padding:24px 12px"><tr><td align="center">
     <table width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#ffffff;border-radius:12px;border:1px solid #ece3d6">
-      <tr><td style="padding:20px 28px;border-bottom:1px solid #ece3d6;font-weight:700;font-size:16px;color:#c2561d">InterviewTracker</td></tr>
+      <tr><td style="padding:20px 28px;border-bottom:1px solid #ece3d6;font-weight:700;font-size:16px;color:#c2561d">HireTrack</td></tr>
       <tr><td style="padding:28px">
         ${greeting}
         <h1 style="margin:0 0 16px;font-size:20px;color:#1c1917">${title}</h1>
@@ -72,7 +72,7 @@ function layout({ name, title, body, buttonText, buttonUrl }) {
         ${signOff}
       </td></tr>
       <tr><td style="padding:16px 28px;border-top:1px solid #ece3d6;font-size:12px;color:#a8a29e">
-        You received this email from the Interview Process Tracking System.
+        You received this email from HireTrack, the interview process tracking system.
       </td></tr>
     </table>
   </td></tr></table></body></html>`;
@@ -133,14 +133,14 @@ module.exports = {
   verifyConnection,
 
   sendTestEmail: (to) =>
-    sendMail(to, 'Test email from InterviewTracker', {
+    sendMail(to, 'Test email from HireTrack', {
       title: 'Email is working 🎉',
       body: `<p>If you can read this, the SMTP settings in your <b>.env</b> file are correct.</p>`,
     }),
 
   // ---------- Candidates ----------
   sendVerification: (to, fullName, token) =>
-    sendMail(to, 'Verify your email - InterviewTracker', {
+    sendMail(to, 'Verify your email - HireTrack', {
       name: fullName,
       title: 'Welcome! Please confirm your email',
       body: `<p>Thank you for creating an account with us. We're glad you're interested in joining our team.</p>
@@ -150,7 +150,7 @@ module.exports = {
     }),
 
   sendSetPassword: (to, fullName, token) =>
-    sendMail(to, 'Your candidate account is ready - InterviewTracker', {
+    sendMail(to, 'Your candidate account is ready - HireTrack', {
       name: fullName,
       title: 'Your candidate account is ready',
       body: `<p>Thank you for your interest in joining us. Our HR team has created a candidate profile for you.</p>

@@ -139,7 +139,7 @@ describe('emails', () => {
 
   test('test email can be sent', async () => {
     await expect(emailService.sendTestEmail('me@example.com')).resolves.toBe(true);
-    expect(lastMail().subject).toBe('Test email from InterviewTracker');
+    expect(lastMail().subject).toBe('Test email from HireTrack');
   });
 
   test('a failed email returns false and does not throw', async () => {
