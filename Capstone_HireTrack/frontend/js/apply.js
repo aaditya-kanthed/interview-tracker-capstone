@@ -17,7 +17,7 @@ document.getElementById('source').innerHTML = Object.entries(SOURCES)
 function showJobSummary(job) {
   document.getElementById('jobSummary').innerHTML = `
     <div class="card mb-6 flex flex-col gap-4 border-brand-200 bg-brand-50/60 sm:flex-row sm:items-center dark:border-brand-500/30 dark:bg-brand-500/10">
-      <span class="grid size-12 place-items-center rounded-xl bg-white text-brand-600 shadow-sm dark:bg-stone-900 dark:text-brand-300">${icon('briefcase', 'size-6')}</span>
+      <span class="grid size-12 place-items-center rounded-xl bg-white text-brand-600 shadow-sm dark:bg-night-800 dark:text-brand-300">${icon('briefcase', 'size-6')}</span>
       <div class="flex-1">
         <p class="text-xs font-semibold tracking-wide text-brand-700 uppercase dark:text-brand-300">You are applying for</p>
         <p class="text-lg font-semibold text-stone-900 dark:text-white">${esc(job.title)}</p>

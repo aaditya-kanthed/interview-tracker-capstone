@@ -20,7 +20,7 @@ const detail = (label, value) => `<div>
   </div>`;
 
 function feedbackCard(f) {
-  return `<div class="rounded-xl border border-stone-200 bg-stone-50 p-4 dark:border-stone-800 dark:bg-stone-800/40">
+  return `<div class="rounded-xl border border-stone-200 bg-stone-50 p-4 dark:border-night-600 dark:bg-night-700/40">
       <div class="flex flex-wrap items-center justify-between gap-2">
         <div class="flex items-center gap-2">${avatar(f.panel.fullName, 'size-7 text-[10px]')}<span class="font-semibold">${esc(f.panel.fullName)}</span></div>
         <div class="flex items-center gap-3">${stars(f.rating)} ${resultBadge(f.result)}</div>
@@ -145,7 +145,7 @@ function renderSideForms(c) {
           .map(
             (
               p,
-            ) => `<label class="flex cursor-pointer items-center gap-3 rounded-lg border border-stone-200 p-3 transition has-[:checked]:border-brand-500 has-[:checked]:bg-brand-50 dark:border-stone-700 dark:has-[:checked]:bg-brand-500/10">
+            ) => `<label class="flex cursor-pointer items-center gap-3 rounded-lg border border-stone-200 p-3 transition has-[:checked]:border-brand-500 has-[:checked]:bg-brand-50 dark:border-night-500 dark:has-[:checked]:bg-brand-500/10">
               <input type="checkbox" name="panelIds" value="${p.id}" class="size-4 accent-brand-600" />
               ${avatar(p.fullName, 'size-8 text-xs')}
               <span class="text-sm"><span class="block font-medium">${esc(p.fullName)}</span><span class="text-xs text-stone-500 dark:text-stone-400">${esc(p.designation)}, ${esc(p.organization)}</span></span>

@@ -61,10 +61,10 @@ async function loadStats() {
   document.getElementById('pipeline').innerHTML = STAGES.map(
     (
       stage,
-    ) => `<button type="button" data-stage="${stage}" class="group rounded-xl border border-stone-200 p-4 text-left transition hover:border-brand-400 hover:shadow-md dark:border-stone-800">
+    ) => `<button type="button" data-stage="${stage}" class="group rounded-xl border border-stone-200 p-4 text-left transition hover:border-brand-400 hover:shadow-md dark:border-night-600">
         <p class="text-xs font-semibold tracking-wide text-stone-500 uppercase dark:text-stone-400">${STAGE_LABELS[stage]}</p>
         <p class="mt-1 text-2xl font-bold text-stone-900 dark:text-white">${s.byStage[stage]}</p>
-        <div class="mt-3 h-1.5 overflow-hidden rounded-full bg-stone-100 dark:bg-stone-800">
+        <div class="mt-3 h-1.5 overflow-hidden rounded-full bg-stone-100 dark:bg-night-700">
           <div class="h-full rounded-full bg-brand-500" style="width:${(s.byStage[stage] / max) * 100}%"></div>
         </div>
       </button>`,
@@ -118,7 +118,7 @@ async function loadCandidates() {
   query.set('page', page);
   query.set('size', PAGE_SIZE);
   const rows = document.getElementById('rows');
-  rows.innerHTML = `<tr><td colspan="6"><div class="h-24 animate-pulse rounded-lg bg-stone-100 dark:bg-stone-800"></div></td></tr>`;
+  rows.innerHTML = `<tr><td colspan="6"><div class="h-24 animate-pulse rounded-lg bg-stone-100 dark:bg-night-700"></div></td></tr>`;
   try {
     const { items, total } = await api(`/candidates?${query}`);
     rows.innerHTML = items.length

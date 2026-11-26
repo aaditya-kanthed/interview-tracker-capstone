@@ -27,7 +27,7 @@ function starPicker() {
 }
 
 function feedbackForm(interviewId) {
-  return `<form class="mt-6 space-y-4 rounded-xl border border-stone-200 p-5 dark:border-stone-800" data-id="${interviewId}" novalidate>
+  return `<form class="mt-6 space-y-4 rounded-xl border border-stone-200 p-5 dark:border-night-600" data-id="${interviewId}" novalidate>
       <h4 class="font-semibold text-stone-900 dark:text-white">Submit feedback</h4>
       <div>
         <label class="label">Rating *</label>
@@ -55,9 +55,9 @@ function feedbackForm(interviewId) {
         <span class="label">Your recommendation *</span>
         <div class="grid grid-cols-2 gap-2">
           <label class="cursor-pointer"><input type="radio" name="result" value="SELECTED" class="peer sr-only" checked />
-            <span class="flex items-center justify-center gap-2 rounded-lg border-2 border-stone-200 p-2.5 text-sm font-semibold transition peer-checked:border-emerald-500 peer-checked:bg-emerald-50 peer-checked:text-emerald-700 dark:border-stone-700 dark:peer-checked:bg-emerald-500/10 dark:peer-checked:text-emerald-300">${icon('check', 'size-4')} Selected</span></label>
+            <span class="flex items-center justify-center gap-2 rounded-lg border-2 border-stone-200 p-2.5 text-sm font-semibold transition peer-checked:border-emerald-500 peer-checked:bg-emerald-50 peer-checked:text-emerald-700 dark:border-night-500 dark:peer-checked:bg-emerald-500/10 dark:peer-checked:text-emerald-300">${icon('check', 'size-4')} Selected</span></label>
           <label class="cursor-pointer"><input type="radio" name="result" value="REJECTED" class="peer sr-only" />
-            <span class="flex items-center justify-center gap-2 rounded-lg border-2 border-stone-200 p-2.5 text-sm font-semibold transition peer-checked:border-rose-500 peer-checked:bg-rose-50 peer-checked:text-rose-700 dark:border-stone-700 dark:peer-checked:bg-rose-500/10 dark:peer-checked:text-rose-300">${icon('x', 'size-4')} Rejected</span></label>
+            <span class="flex items-center justify-center gap-2 rounded-lg border-2 border-stone-200 p-2.5 text-sm font-semibold transition peer-checked:border-rose-500 peer-checked:bg-rose-50 peer-checked:text-rose-700 dark:border-night-500 dark:peer-checked:bg-rose-500/10 dark:peer-checked:text-rose-300">${icon('x', 'size-4')} Rejected</span></label>
         </div>
       </div>
       <button class="btn btn-primary" type="submit">Submit feedback</button>
@@ -93,7 +93,7 @@ function interviewCard(i) {
         <summary class="flex cursor-pointer list-none items-center gap-1 text-sm font-semibold text-brand-600 dark:text-brand-400">
           <span class="transition group-open:rotate-90">&rsaquo;</span> Candidate profile &amp; job description
         </summary>
-        <div class="mt-3 grid gap-4 rounded-lg border border-stone-200 p-4 text-sm sm:grid-cols-2 dark:border-stone-800">
+        <div class="mt-3 grid gap-4 rounded-lg border border-stone-200 p-4 text-sm sm:grid-cols-2 dark:border-night-600">
           <div><p class="muted">Experience</p><p class="font-medium">${c.totalExperience} yrs total, ${c.relevantExperience} yrs relevant</p></div>
           <div><p class="muted">Current organization</p><p class="font-medium">${esc(c.currentOrganization || '-')}</p></div>
           <div><p class="muted">Notice period</p><p class="font-medium">${c.noticePeriodDays} days</p></div>
@@ -116,9 +116,9 @@ function render() {
       ([key, label, count]) =>
         `<button type="button" data-tab="${key}" class="rounded-lg px-4 py-2 text-sm font-semibold transition ${
           tab === key
-            ? 'bg-white text-stone-900 shadow-sm ring-1 ring-stone-200 dark:bg-stone-800 dark:text-white dark:ring-stone-700'
+            ? 'bg-white text-stone-900 shadow-sm ring-1 ring-stone-200 dark:bg-night-700 dark:text-white dark:ring-night-500'
             : 'text-stone-500 hover:text-stone-800 dark:text-stone-400 dark:hover:text-white'
-        }">${label} <span class="ml-1 rounded-full bg-stone-100 px-2 py-0.5 text-xs dark:bg-stone-700">${count}</span></button>`,
+        }">${label} <span class="ml-1 rounded-full bg-stone-100 px-2 py-0.5 text-xs dark:bg-night-600">${count}</span></button>`,
     )
     .join('');
   const list = tab === 'pending' ? pending : done;

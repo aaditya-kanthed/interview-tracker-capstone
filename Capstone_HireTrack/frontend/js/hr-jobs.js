@@ -118,7 +118,7 @@ function jobCard(j) {
         ${j.isOpen ? '<span class="badge badge-green">Open</span>' : '<span class="badge badge-gray">Closed</span>'}
       </div>
       <div class="mt-4 flex flex-wrap gap-1.5">${j.skills.map((s) => `<span class="skill-chip">${esc(s)}</span>`).join('')}</div>
-      <div class="mt-5 flex items-center justify-between border-t border-stone-100 pt-4 dark:border-stone-800">
+      <div class="mt-5 flex items-center justify-between border-t border-stone-100 pt-4 dark:border-night-600">
         <span class="muted inline-flex items-center gap-1">${icon('users', 'size-4')} ${j._count.candidates} candidate${j._count.candidates === 1 ? '' : 's'}</span>
         <div class="flex gap-2">
           <button class="btn btn-secondary btn-sm" data-action="edit" data-id="${j.id}">${icon('pencil', 'size-3.5')} Edit</button>
@@ -142,9 +142,9 @@ function renderTabs() {
       (t) =>
         `<button type="button" data-tab="${t}" class="rounded-lg px-4 py-2 text-sm font-semibold transition ${
           tab === t
-            ? 'bg-white text-stone-900 shadow-sm ring-1 ring-stone-200 dark:bg-stone-800 dark:text-white dark:ring-stone-700'
+            ? 'bg-white text-stone-900 shadow-sm ring-1 ring-stone-200 dark:bg-night-700 dark:text-white dark:ring-night-500'
             : 'text-stone-500 hover:text-stone-800 dark:text-stone-400 dark:hover:text-white'
-        }">${t === 'open' ? 'Open' : 'Closed'} <span class="ml-1 rounded-full bg-stone-100 px-2 py-0.5 text-xs dark:bg-stone-700">${counts[t]}</span></button>`,
+        }">${t === 'open' ? 'Open' : 'Closed'} <span class="ml-1 rounded-full bg-stone-100 px-2 py-0.5 text-xs dark:bg-night-600">${counts[t]}</span></button>`,
     )
     .join('');
 }

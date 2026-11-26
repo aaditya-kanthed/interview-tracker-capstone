@@ -60,7 +60,7 @@ function themeToggleHtml() {
       class="relative inline-flex h-7 w-14 shrink-0 cursor-pointer items-center rounded-full bg-stone-200 transition-colors duration-300
              focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500 dark:bg-brand-600">
       <span class="pointer-events-none grid size-6 translate-x-0.5 place-items-center rounded-full bg-white shadow-md ring-1 ring-black/5
-                   transition-transform duration-300 ease-out dark:translate-x-[1.875rem] dark:bg-stone-900">
+                   transition-transform duration-300 ease-out dark:translate-x-[1.875rem] dark:bg-night-800">
         <span class="text-amber-500 dark:hidden">${icon('sun', 'size-4')}</span>
         <span class="hidden text-brand-200 dark:block">${icon('moon', 'size-4')}</span>
       </span>
@@ -144,7 +144,7 @@ function renderNavbar() {
 
   document.body.insertAdjacentHTML(
     'afterbegin',
-    `<header class="sticky top-0 z-30 border-b border-stone-200/80 bg-white/80 backdrop-blur-md dark:border-stone-800 dark:bg-stone-950/80">
+    `<header class="sticky top-0 z-30 border-b border-stone-200/80 bg-white/80 backdrop-blur-md dark:border-night-600 dark:bg-night-900/80">
        <div class="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6">
          <div class="flex items-center gap-6">
            ${brandHtml()}
@@ -153,9 +153,9 @@ function renderNavbar() {
          <div class="hidden items-center gap-4 sm:flex">${themeToggleHtml()} ${account}</div>
          <button type="button" class="btn btn-ghost p-2 sm:hidden" data-menu-button aria-label="Open menu" aria-expanded="false">${icon('menu', 'size-6')}</button>
        </div>
-       <div class="hidden border-t border-stone-200 px-4 pb-4 sm:hidden dark:border-stone-800" data-mobile-menu>
+       <div class="hidden border-t border-stone-200 px-4 pb-4 sm:hidden dark:border-night-600" data-mobile-menu>
          <nav class="flex flex-col gap-1 pt-3">${linkHtml}</nav>
-         <div class="mt-3 flex items-center justify-between border-t border-stone-200 pt-3 dark:border-stone-800">
+         <div class="mt-3 flex items-center justify-between border-t border-stone-200 pt-3 dark:border-night-600">
            <span class="flex items-center gap-3 text-sm font-medium">Dark mode ${themeToggleHtml()}</span>
            ${user ? `<span class="flex gap-1"><a href="change-password.html" class="btn btn-ghost btn-sm">${icon('key', 'size-4')} Password</a><button type="button" class="btn btn-ghost btn-sm" data-logout>${icon('logout', 'size-4')} Logout</button></span>` : '<a href="login.html" class="btn btn-primary btn-sm">Log in</a>'}
          </div>
@@ -201,7 +201,7 @@ function toast(message, type = 'success') {
   }[type];
   const el = document.createElement('div');
   el.className =
-    'pointer-events-auto flex w-full animate-toast-in items-start gap-3 rounded-xl border border-stone-200 bg-white p-4 text-sm shadow-lg dark:border-stone-700 dark:bg-stone-800';
+    'pointer-events-auto flex w-full animate-toast-in items-start gap-3 rounded-xl border border-stone-200 bg-white p-4 text-sm shadow-lg dark:border-night-500 dark:bg-night-700';
   el.innerHTML = `<span class="${styles[0]}">${icon(styles[1])}</span><p class="flex-1 font-medium">${esc(message)}</p>`;
   box.appendChild(el);
   setTimeout(() => {
@@ -331,8 +331,8 @@ function stars(rating) {
 }
 
 function emptyState(iconName, title, text = '', actionHtml = '') {
-  return `<div class="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-stone-200 px-6 py-14 text-center dark:border-stone-800">
-      <span class="grid size-12 place-items-center rounded-full bg-stone-100 text-stone-400 dark:bg-stone-800">${icon(iconName, 'size-6')}</span>
+  return `<div class="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-stone-200 px-6 py-14 text-center dark:border-night-600">
+      <span class="grid size-12 place-items-center rounded-full bg-stone-100 text-stone-400 dark:bg-night-700">${icon(iconName, 'size-6')}</span>
       <h3 class="mt-4 font-semibold text-stone-900 dark:text-white">${title}</h3>
       ${text ? `<p class="muted mt-1 max-w-sm">${text}</p>` : ''}
       ${actionHtml ? `<div class="mt-5">${actionHtml}</div>` : ''}
@@ -343,7 +343,7 @@ function skeleton(lines = 3) {
   return `<div class="card animate-pulse space-y-3">${Array.from(
     { length: lines },
     (_, i) =>
-      `<div class="h-4 rounded bg-stone-200 dark:bg-stone-800" style="width:${90 - i * 15}%"></div>`,
+      `<div class="h-4 rounded bg-stone-200 dark:bg-night-700" style="width:${90 - i * 15}%"></div>`,
   ).join('')}</div>`;
 }
 
@@ -371,7 +371,7 @@ function stageStepper(stage, status) {
         ? `<span class="${base} bg-emerald-500 text-white">${icon('check', 'size-4')}</span>`
         : active
           ? `<span class="${base} bg-brand-600 text-white ring-4 ring-brand-500/25 shadow-md shadow-brand-500/30">${i + 1}</span>`
-          : `<span class="${base} border-2 border-stone-200 bg-white text-stone-400 dark:border-stone-700 dark:bg-stone-900">${i + 1}</span>`;
+          : `<span class="${base} border-2 border-stone-200 bg-white text-stone-400 dark:border-night-500 dark:bg-night-800">${i + 1}</span>`;
     const labelColor =
       active || rejectedHere
         ? 'font-semibold text-stone-900 dark:text-white'
@@ -385,7 +385,7 @@ function stageStepper(stage, status) {
   }).join('');
 
   return `<div class="relative" role="group" aria-label="Interview pipeline: ${STAGE_LABELS[stage]}, ${STATUS_LABELS[status] || ''}">
-      <div class="absolute top-[1.0625rem] right-[10%] left-[10%] h-1 rounded-full bg-stone-200 dark:bg-stone-800"></div>
+      <div class="absolute top-[1.0625rem] right-[10%] left-[10%] h-1 rounded-full bg-stone-200 dark:bg-night-700"></div>
       <div class="absolute top-[1.0625rem] left-[10%] h-1 rounded-full ${fillColor} transition-all duration-700" style="width:${fillPercent}%"></div>
       <ol class="relative grid grid-cols-5">${steps}</ol>
     </div>`;
@@ -471,7 +471,7 @@ async function renderGoogleButton(onLogin) {
 function renderFooter() {
   document.body.insertAdjacentHTML(
     'beforeend',
-    `<footer class="mt-16 border-t border-stone-200 py-6 text-center text-xs text-stone-500 dark:border-stone-800 dark:text-stone-500">
+    `<footer class="mt-16 border-t border-stone-200 py-6 text-center text-xs text-stone-500 dark:border-night-600 dark:text-stone-500">
        HireTrack &middot; Interview Process Tracking System
      </footer>`,
   );

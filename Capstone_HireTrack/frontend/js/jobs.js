@@ -37,7 +37,7 @@ function renderTypeFilters() {
         `<button type="button" data-type="${value}" class="rounded-full border px-4 py-1.5 text-sm font-medium transition ${
           value === activeType
             ? 'border-brand-600 bg-brand-600 text-white'
-            : 'border-stone-300 bg-white text-stone-600 hover:border-brand-400 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-300'
+            : 'border-stone-300 bg-white text-stone-600 hover:border-brand-400 dark:border-night-500 dark:bg-night-800 dark:text-stone-300'
         }">${label}</button>`,
     )
     .join('');

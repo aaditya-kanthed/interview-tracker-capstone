@@ -33,7 +33,7 @@ function statusBanner(status) {
 function interviewCard(i) {
   const upcoming = new Date(i.scheduledAt) > new Date();
   const panel = i.panels.map((p) => esc(p.panel.fullName)).join(', ');
-  return `<div class="flex gap-4 rounded-xl border border-stone-200 p-4 dark:border-stone-800">
+  return `<div class="flex gap-4 rounded-xl border border-stone-200 p-4 dark:border-night-600">
       <div class="grid w-16 shrink-0 place-items-center rounded-lg bg-brand-50 py-2 text-center dark:bg-brand-500/10">
         <span class="text-xs font-semibold text-brand-600 uppercase dark:text-brand-300">${new Date(i.scheduledAt).toLocaleString('en-IN', { month: 'short' })}</span>
         <span class="text-2xl font-bold text-stone-900 dark:text-white">${new Date(i.scheduledAt).getDate()}</span>
