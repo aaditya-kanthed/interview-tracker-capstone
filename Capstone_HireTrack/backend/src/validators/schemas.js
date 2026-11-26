@@ -23,6 +23,7 @@ const registerSchema = z.object({ fullName: name, email, password });
 const loginSchema = z.object({ email, password: z.string().min(1) });
 const setPasswordSchema = z.object({ token: z.string().min(10), password });
 const googleLoginSchema = z.object({ credential: z.string().min(20).max(5000) });
+const forgotPasswordSchema = z.object({ email });
 const changePasswordSchema = z.object({
   currentPassword: z.string().max(72).optional(),
   newPassword: password,
@@ -132,6 +133,7 @@ module.exports = {
   loginSchema,
   setPasswordSchema,
   googleLoginSchema,
+  forgotPasswordSchema,
   changePasswordSchema,
   jobSchema,
   candidateSchema,

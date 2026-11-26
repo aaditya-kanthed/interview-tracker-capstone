@@ -159,6 +159,18 @@ module.exports = {
       buttonUrl: `${appUrl}/set-password.html?token=${token}`,
     }),
 
+  // "Forgot password?" on the login page (any role)
+  sendPasswordReset: (to, fullName, token) =>
+    sendMail(to, 'Reset your password - HireTrack', {
+      name: fullName,
+      title: 'Reset your password',
+      body: `<p>We received a request to reset the password for your HireTrack account.</p>
+             <p>Click the button below to choose a new password. The link is valid for <b>1 hour</b> and works only once.</p>
+             <p style="color:#78716c">If you didn't ask for this, you can safely ignore this email. Your password will not change.</p>`,
+      buttonText: 'Reset my password',
+      buttonUrl: `${appUrl}/set-password.html?token=${token}&reset=1`,
+    }),
+
   sendInterviewScheduled: (to, { candidateName, round, scheduledAt, panelNames, meetingLink }) =>
     sendMail(to, `Your ${round} interview is scheduled`, {
       name: candidateName,

@@ -10,6 +10,12 @@ function safeNext() {
   return next && next.startsWith('/') && !next.startsWith('//') ? next : null;
 }
 
+// Carry the typed email over to the "Forgot password?" page
+document.getElementById('forgotLink').addEventListener('click', (e) => {
+  const email = form.email.value.trim();
+  if (email) e.currentTarget.href = `forgot-password.html?email=${encodeURIComponent(email)}`;
+});
+
 document.getElementById('showPassword').addEventListener('click', (e) => {
   const input = document.getElementById('password');
   const show = input.type === 'password';

@@ -50,4 +50,12 @@ router.post('/set-password', validate(s.setPasswordSchema), async (req, res) => 
   res.json({ message: 'Password set. You can log in now.' });
 });
 
+// "Forgot password?": emails a reset link. Same answer whether or not the email is registered.
+router.post('/forgot-password', validate(s.forgotPasswordSchema), async (req, res) => {
+  await authService.requestPasswordReset(req.validated.email);
+  res.json({
+    message: 'If an account exists for this email, we have sent a link to reset the password.',
+  });
+});
+
 module.exports = router;

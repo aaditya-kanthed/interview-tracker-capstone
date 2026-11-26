@@ -1,5 +1,8 @@
 jest.mock('../src/config/prisma', () => require('./mockPrisma')());
-jest.mock('../src/services/emailService', () => ({ sendVerification: jest.fn() }));
+jest.mock('../src/services/emailService', () => ({
+  sendVerification: jest.fn(),
+  sendPasswordReset: jest.fn(),
+}));
 
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -192,6 +195,68 @@ describe('changePassword', () => {
     await expect(
       authService.changePassword(1, { newPassword: 'x'.repeat(8) }),
     ).rejects.toMatchObject({ status: 401 });
+  });
+});
+
+describe('requestPasswordReset (forgot password)', () => {
+  const HOUR = 60 * 60 * 1000;
+  const account = (extra = {}) => ({
+    id: 4,
+    email: 'riya@example.com',
+    fullName: 'Riya',
+    isActive: true,
+    tokenExpiresAt: null,
+    ...extra,
+  });
+
+  test('unknown email: does nothing and reveals nothing', async () => {
+    prisma.user.findUnique.mockResolvedValue(null);
+    await expect(authService.requestPasswordReset('nobody@example.com')).resolves.toBeUndefined();
+    expect(emailService.sendPasswordReset).not.toHaveBeenCalled();
+  });
+
+  test('inactive panel member does not get a reset link', async () => {
+    prisma.user.findUnique.mockResolvedValue(account({ isActive: false }));
+    await authService.requestPasswordReset('riya@example.com');
+    expect(emailService.sendPasswordReset).not.toHaveBeenCalled();
+  });
+
+  test('sends a 1-hour reset link and stores only the hash', async () => {
+    prisma.user.findUnique.mockResolvedValue(account());
+    await authService.requestPasswordReset('riya@example.com');
+
+    const { data } = prisma.user.update.mock.calls[0][0];
+    const token = emailService.sendPasswordReset.mock.calls[0][2];
+    expect(emailService.sendPasswordReset).toHaveBeenCalledWith('riya@example.com', 'Riya', token);
+    expect(data.tokenHash).toHaveLength(64);
+    expect(data.tokenHash).not.toBe(token);
+    const validFor = data.tokenExpiresAt.getTime() - Date.now();
+    expect(validFor).toBeGreaterThan(HOUR - 5000);
+    expect(validFor).toBeLessThanOrEqual(HOUR);
+  });
+
+  test('ignores repeated clicks within 2 minutes', async () => {
+    prisma.user.findUnique.mockResolvedValue(
+      account({ tokenExpiresAt: new Date(Date.now() + HOUR - 30 * 1000) }), // sent 30s ago
+    );
+    await authService.requestPasswordReset('riya@example.com');
+    expect(emailService.sendPasswordReset).not.toHaveBeenCalled();
+  });
+
+  test('a new link can be sent after 2 minutes', async () => {
+    prisma.user.findUnique.mockResolvedValue(
+      account({ tokenExpiresAt: new Date(Date.now() + HOUR - 3 * 60 * 1000) }), // sent 3 min ago
+    );
+    await authService.requestPasswordReset('riya@example.com');
+    expect(emailService.sendPasswordReset).toHaveBeenCalled();
+  });
+
+  test('a pending 24-hour set-password link does not block a reset', async () => {
+    prisma.user.findUnique.mockResolvedValue(
+      account({ tokenExpiresAt: new Date(Date.now() + 23 * HOUR) }),
+    );
+    await authService.requestPasswordReset('riya@example.com');
+    expect(emailService.sendPasswordReset).toHaveBeenCalled();
   });
 });
 

@@ -155,3 +155,21 @@ describe('Google routes', () => {
     expect(res.body.user.email).toBe('riya@gmail.com');
   });
 });
+
+describe('Forgot password route', () => {
+  test('gives the same answer for an unknown email (no account leak)', async () => {
+    prisma.user.findUnique.mockResolvedValue(null);
+    const res = await request(app)
+      .post('/api/auth/forgot-password')
+      .send({ email: 'nobody@example.com' });
+    expect(res.status).toBe(200);
+    expect(res.body.message).toMatch(/If an account exists/);
+  });
+
+  test('rejects a badly typed email', async () => {
+    const res = await request(app)
+      .post('/api/auth/forgot-password')
+      .send({ email: 'not-an-email' });
+    expect(res.status).toBe(400);
+  });
+});

@@ -20,6 +20,15 @@ afterAll(() => Object.assign(env.smtp, realSmtp));
 const lastMail = () => mockSendMail.mock.calls[0][0];
 
 describe('emails', () => {
+  test('password reset email has a 1-hour reset link and a greeting', async () => {
+    await emailService.sendPasswordReset('a@example.com', 'Riya', 'tok999');
+    const { html, subject } = lastMail();
+    expect(subject).toBe('Reset your password - HireTrack');
+    expect(html).toContain('Dear Riya,');
+    expect(html).toContain('/set-password.html?token=tok999&reset=1');
+    expect(html).toContain('1 hour');
+  });
+
   test('verification email greets the candidate by name and signs off from HR', async () => {
     await emailService.sendVerification('a@example.com', 'Riya Sharma', 'tok123');
     expect(lastMail().html).toContain('Dear Riya Sharma,');

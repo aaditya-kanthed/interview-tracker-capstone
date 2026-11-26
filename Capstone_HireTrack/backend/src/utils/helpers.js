@@ -14,11 +14,11 @@ function hashToken(token) {
   return crypto.createHash('sha256').update(token).digest('hex');
 }
 
-// Secure one-time link token (email verification, set password).
+// Secure one-time link token (email verification, set password, password reset).
 // We email the raw token but store only its hash in the database.
-function createOneTimeToken() {
+function createOneTimeToken(validForMs = ONE_DAY_MS) {
   const token = crypto.randomBytes(32).toString('hex');
-  return { token, tokenHash: hashToken(token), tokenExpiresAt: new Date(Date.now() + ONE_DAY_MS) };
+  return { token, tokenHash: hashToken(token), tokenExpiresAt: new Date(Date.now() + validForMs) };
 }
 
 // Readable temporary password, e.g. "Kp7m-Rt4x-Wq9z" (no 0/O/1/l/I to avoid confusion)

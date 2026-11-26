@@ -56,6 +56,28 @@ async function setPassword(token, password) {
   });
 }
 
+// ---------- Forgot password ----------
+const RESET_LINK_VALID_MS = 60 * 60 * 1000; // 1 hour
+const RESEND_WAIT_MS = 2 * 60 * 1000; // at most one reset email every 2 minutes per account
+
+// Always answers the same way, so nobody can use this form to find out which emails are registered.
+async function requestPasswordReset(email) {
+  const user = await prisma.user.findUnique({ where: { email } });
+  // Panel members HR has not activated yet cannot reset; they get login details from HR
+  if (!user || !user.isActive) return;
+
+  // Ignore repeated clicks: a reset link sent less than 2 minutes ago is still fresh
+  const recentlySent =
+    user.tokenExpiresAt &&
+    user.tokenExpiresAt.getTime() - Date.now() > RESET_LINK_VALID_MS - RESEND_WAIT_MS &&
+    user.tokenExpiresAt.getTime() - Date.now() <= RESET_LINK_VALID_MS;
+  if (recentlySent) return;
+
+  const { token, tokenHash, tokenExpiresAt } = createOneTimeToken(RESET_LINK_VALID_MS);
+  await prisma.user.update({ where: { id: user.id }, data: { tokenHash, tokenExpiresAt } });
+  await emailService.sendPasswordReset(user.email, user.fullName, token);
+}
+
 // Our own JWT + the user details the frontend needs.
 // mustChangePassword goes into the token so the server can block everything else until it's done.
 function issueLogin(user) {
@@ -168,6 +190,7 @@ module.exports = {
   registerCandidate,
   verifyEmail,
   setPassword,
+  requestPasswordReset,
   login,
   loginWithGoogle,
   changePassword,
