@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>HR Dashboard | InterviewTracker</title>
+    <script src="js/theme.js"></script>
+    <link rel="stylesheet" href="css/output.css" />
+  </head>
+  <body class="min-h-screen">
+    <main class="mx-auto max-w-7xl px-4 py-8 sm:px-6">
+      <div id="header"></div>
+
+      <!-- Stat cards + pipeline -->
+      <div id="stats" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4"></div>
+      <section class="card mt-6">
+        <h2 class="text-base font-semibold text-stone-900 dark:text-white">Hiring pipeline</h2>
+        <p class="muted">Candidates in each stage (click a stage to filter)</p>
+        <div id="pipeline" class="mt-5 grid gap-3 sm:grid-cols-5"></div>
+      </section>
+
+      <!-- Candidates table -->
+      <section class="card mt-6 p-0">
+        <form
+          id="filters"
+          class="flex flex-col gap-3 border-b border-stone-200 p-4 lg:flex-row dark:border-stone-800"
+        >
+          <label class="relative flex-1">
+            <span class="sr-only">Search</span>
+            <span
+              class="pointer-events-none absolute inset-y-0 left-3 flex items-center text-stone-400"
+              id="searchIcon"
+            ></span>
+            <input class="input pl-10" name="search" placeholder="Search by name or email" />
+          </label>
+          <select class="input lg:w-52" name="jobId" id="jobFilter">
+            <option value="">All jobs</option>
+          </select>
+          <select class="input lg:w-44" name="stage" id="stageFilter">
+            <option value="">All stages</option>
+          </select>
+          <select class="input lg:w-48" name="status" id="statusFilter">
+            <option value="">All statuses</option>
+          </select>
+          <div class="flex gap-2">
+            <button class="btn btn-primary" type="submit">Filter</button>
+            <button class="btn btn-secondary" type="reset">Clear</button>
+          </div>
+        </form>
+        <div class="overflow-x-auto">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Candidate</th>
+                <th>Job</th>
+                <th>Stage</th>
+                <th>Status</th>
+                <th>Last update</th>
+                <th class="text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="rows"></tbody>
+          </table>
+        </div>
+        <div
+          class="flex items-center justify-between border-t border-stone-200 px-4 py-3 dark:border-stone-800"
+        >
+          <span id="pageInfo" class="muted"></span>
+          <div class="flex gap-2">
+            <button class="btn btn-secondary btn-sm" id="prevBtn">Previous</button>
+            <button class="btn btn-secondary btn-sm" id="nextBtn">Next</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="js/api.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/hr-dashboard.js"></script>
+  </body>
+</html>

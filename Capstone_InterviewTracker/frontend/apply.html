@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Candidate profile | InterviewTracker</title>
+    <script src="js/theme.js"></script>
+    <link rel="stylesheet" href="css/output.css" />
+  </head>
+  <body class="min-h-screen">
+    <main class="mx-auto max-w-4xl px-4 py-8 sm:px-6">
+      <div id="header"></div>
+      <div id="jobSummary"></div>
+
+      <form id="applyForm" class="space-y-6" novalidate hidden>
+        <!-- HR only: who is the candidate -->
+        <section class="card" id="hrOnly" hidden>
+          <h2 class="text-base font-semibold text-stone-900 dark:text-white">Candidate account</h2>
+          <p class="muted mt-1">The candidate gets an email to set their own password.</p>
+          <div class="mt-5 grid gap-5 sm:grid-cols-2">
+            <div>
+              <label class="label" for="fullName">Full name *</label>
+              <input class="input" id="fullName" name="fullName" minlength="2" maxlength="100" />
+            </div>
+            <div>
+              <label class="label" for="email">Email *</label>
+              <input class="input" id="email" type="email" name="email" />
+            </div>
+            <div class="sm:col-span-2">
+              <label class="label" for="jobSelect">JD applied for *</label>
+              <select class="input" id="jobSelect" name="jobId" required></select>
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <h2 class="text-base font-semibold text-stone-900 dark:text-white">Personal details</h2>
+          <div class="mt-5 grid gap-5 sm:grid-cols-6">
+            <div class="sm:col-span-2">
+              <label class="label" for="mobileCode">Code *</label>
+              <input
+                class="input"
+                id="mobileCode"
+                name="mobileCode"
+                value="+91"
+                required
+                pattern="\+\d{1,4}"
+              />
+            </div>
+            <div class="sm:col-span-4">
+              <label class="label" for="mobile">Mobile number *</label>
+              <input
+                class="input"
+                id="mobile"
+                name="mobile"
+                required
+                pattern="\d{7,15}"
+                inputmode="numeric"
+                placeholder="9876543210"
+              />
+            </div>
+            <div class="sm:col-span-3">
+              <label class="label" for="dateOfBirth"
+                >Date of birth <span class="text-stone-400">(optional)</span></label
+              >
+              <input class="input" id="dateOfBirth" type="date" name="dateOfBirth" />
+            </div>
+            <div class="sm:col-span-3">
+              <label class="label" for="currentOrganization">Current organization</label>
+              <input
+                class="input"
+                id="currentOrganization"
+                name="currentOrganization"
+                maxlength="150"
+              />
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <h2 class="text-base font-semibold text-stone-900 dark:text-white">
+            Experience &amp; salary
+          </h2>
+          <div class="mt-5 grid gap-5 sm:grid-cols-2">
+            <div>
+              <label class="label" for="totalExperience">Total experience (years) *</label>
+              <input
+                class="input"
+                id="totalExperience"
+                type="number"
+                name="totalExperience"
+                min="0"
+                max="50"
+                step="0.5"
+                required
+              />
+            </div>
+            <div>
+              <label class="label" for="relevantExperience">Relevant experience (years) *</label>
+              <input
+                class="input"
+                id="relevantExperience"
+                type="number"
+                name="relevantExperience"
+                min="0"
+                max="50"
+                step="0.5"
+                required
+              />
+            </div>
+            <div>
+              <label class="label" for="currentCtc">Current CTC (₹ per year) *</label>
+              <input
+                class="input"
+                id="currentCtc"
+                type="number"
+                name="currentCtc"
+                min="0"
+                required
+                placeholder="500000"
+              />
+            </div>
+            <div>
+              <label class="label" for="expectedCtc">Expected CTC (₹ per year) *</label>
+              <input
+                class="input"
+                id="expectedCtc"
+                type="number"
+                name="expectedCtc"
+                min="0"
+                required
+                placeholder="700000"
+              />
+            </div>
+            <div>
+              <label class="label" for="noticePeriodDays">Notice period (days) *</label>
+              <input
+                class="input"
+                id="noticePeriodDays"
+                type="number"
+                name="noticePeriodDays"
+                min="0"
+                max="180"
+                required
+              />
+            </div>
+            <div>
+              <label class="label" for="preferredLocation">Preferred location *</label>
+              <input
+                class="input"
+                id="preferredLocation"
+                name="preferredLocation"
+                required
+                minlength="2"
+              />
+            </div>
+            <div>
+              <label class="label" for="source">How did you hear about us? *</label>
+              <select class="input" id="source" name="source" required></select>
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <h2 class="text-base font-semibold text-stone-900 dark:text-white">Resume</h2>
+          <label
+            id="dropZone"
+            for="resume"
+            class="mt-5 flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-stone-300 px-6 py-10 text-center transition hover:border-brand-400 hover:bg-brand-50/50 dark:border-stone-700 dark:hover:bg-brand-500/5"
+          >
+            <span id="uploadIcon" class="text-brand-500"></span>
+            <span
+              class="mt-3 text-sm font-semibold text-stone-700 dark:text-stone-200"
+              id="fileName"
+              >Click to upload or drag your PDF here</span
+            >
+            <span class="muted mt-1">PDF only, up to 5 MB</span>
+            <input
+              class="sr-only"
+              id="resume"
+              type="file"
+              name="resume"
+              accept="application/pdf"
+              required
+            />
+          </label>
+        </section>
+
+        <div class="flex justify-end gap-3">
+          <a href="index.html" class="btn btn-secondary" id="cancelLink">Cancel</a>
+          <button type="submit" class="btn btn-primary px-6">Submit profile</button>
+        </div>
+      </form>
+    </main>
+
+    <script src="js/api.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/apply.js"></script>
+  </body>
+</html>

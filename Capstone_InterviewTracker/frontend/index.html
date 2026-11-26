@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Open Jobs | InterviewTracker</title>
+    <script src="js/theme.js"></script>
+    <link rel="stylesheet" href="css/output.css" />
+  </head>
+  <body class="min-h-screen">
+    <section class="border-b border-stone-200 bg-white dark:border-stone-800 dark:bg-stone-900">
+      <div class="mx-auto max-w-7xl px-4 py-16 text-center sm:px-6 sm:py-20">
+        <span class="badge badge-brand mb-4">We are hiring</span>
+        <h1
+          class="mx-auto max-w-3xl text-4xl font-extrabold tracking-tight text-stone-900 sm:text-5xl dark:text-white"
+        >
+          Find a role where you can
+          <span class="text-brand-600 dark:text-brand-400">do your best work</span>
+        </h1>
+        <p class="mx-auto mt-4 max-w-xl text-lg text-stone-600 dark:text-stone-400">
+          Apply in minutes, then track every interview round from screening to offer in one place.
+        </p>
+        <div class="mx-auto mt-8 flex max-w-2xl flex-col gap-3 sm:flex-row">
+          <label class="relative flex-1">
+            <span class="sr-only">Search jobs</span>
+            <span
+              class="pointer-events-none absolute inset-y-0 left-3 flex items-center text-stone-400"
+              id="searchIcon"
+            ></span>
+            <input
+              id="search"
+              class="input py-3 pl-10 text-base"
+              placeholder="Search by title, skill or location"
+              autocomplete="off"
+            />
+          </label>
+        </div>
+        <div class="mt-4 flex flex-wrap justify-center gap-2" id="typeFilters"></div>
+      </div>
+    </section>
+
+    <main class="mx-auto max-w-7xl px-4 py-10 sm:px-6">
+      <div class="mb-6 flex items-center justify-between">
+        <h2 class="text-xl font-bold text-stone-900 dark:text-white">Open positions</h2>
+        <span class="muted" id="jobCount"></span>
+      </div>
+      <div id="jobs" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"></div>
+    </main>
+
+    <script src="js/api.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/jobs.js"></script>
+  </body>
+</html>

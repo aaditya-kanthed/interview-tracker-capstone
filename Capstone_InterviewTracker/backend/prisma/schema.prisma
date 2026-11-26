@@ -1,0 +1,155 @@
+// Prisma schema = our replacement for JPA @Entity classes
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  HR
+  PANEL
+  CANDIDATE
+}
+
+enum JobType {
+  FULL_TIME
+  CONTRACT
+  REMOTE
+}
+
+enum Stage {
+  PROFILING
+  SCREENING
+  L1_TECHNICAL
+  L2_TECHNICAL
+  HR_ROUND
+}
+
+enum CandidateStatus {
+  PROFILING_COMPLETED
+  IN_PROGRESS
+  SELECTED
+  REJECTED
+}
+
+enum Round {
+  L1
+  L2
+}
+
+enum Result {
+  SELECTED
+  REJECTED
+}
+
+model User {
+  id             Int       @id @default(autoincrement())
+  fullName       String
+  email          String    @unique
+  mobileCode     String?
+  mobile         String?
+  passwordHash   String?
+  role           Role
+  isVerified     Boolean   @default(false)
+  isActive       Boolean   @default(true)
+  organization   String?
+  designation    String?
+  tokenHash      String?   @unique
+  tokenExpiresAt DateTime?
+  mustChangePassword Boolean @default(false) // true after HR emails a temporary password
+  createdAt      DateTime  @default(now())
+
+  candidate   Candidate?
+  jobsCreated Job[]
+  interviews  InterviewPanel[]
+  feedbacks   Feedback[]
+
+  @@unique([mobileCode, mobile])
+}
+
+model Job {
+  id            Int         @id @default(autoincrement())
+  title         String
+  description   String
+  skills        String[]
+  minExperience Int
+  maxExperience Int
+  minSalary     Int
+  maxSalary     Int
+  location      String
+  jobType       JobType
+  isOpen        Boolean     @default(true)
+  createdAt     DateTime    @default(now())
+  createdById   Int
+  createdBy     User        @relation(fields: [createdById], references: [id])
+  candidates    Candidate[]
+}
+
+model Candidate {
+  id                  Int             @id @default(autoincrement())
+  userId              Int             @unique // one application per candidate
+  user                User            @relation(fields: [userId], references: [id])
+  jobId               Int
+  job                 Job             @relation(fields: [jobId], references: [id])
+  dateOfBirth         DateTime?
+  resumeFile          String
+  currentOrganization String?
+  totalExperience     Float
+  relevantExperience  Float
+  currentCtc          Float
+  expectedCtc         Float
+  noticePeriodDays    Int
+  preferredLocation   String
+  source              String
+  stage               Stage           @default(PROFILING)
+  status              CandidateStatus @default(PROFILING_COMPLETED)
+  finalComments       String?
+  createdAt           DateTime        @default(now())
+  updatedAt           DateTime        @updatedAt
+  interviews          Interview[]
+
+  @@index([jobId, stage, status])
+}
+
+model Interview {
+  id          Int              @id @default(autoincrement())
+  candidateId Int
+  candidate   Candidate        @relation(fields: [candidateId], references: [id])
+  round       Round
+  scheduledAt DateTime
+  focusAreas  String
+  meetingLink String? // e.g. https://meet.google.com/abc-defg-hij
+  panels      InterviewPanel[]
+  feedbacks   Feedback[]
+
+  @@unique([candidateId, round])
+}
+
+model InterviewPanel {
+  interviewId Int
+  interview   Interview @relation(fields: [interviewId], references: [id])
+  panelId     Int
+  panel       User      @relation(fields: [panelId], references: [id])
+
+  @@id([interviewId, panelId])
+}
+
+model Feedback {
+  id           Int       @id @default(autoincrement())
+  interviewId  Int
+  interview    Interview @relation(fields: [interviewId], references: [id])
+  panelId      Int
+  panel        User      @relation(fields: [panelId], references: [id])
+  comments     String
+  strengths    String
+  weaknesses   String
+  areasCovered String
+  rating       Int
+  result       Result
+  createdAt    DateTime  @default(now())
+
+  @@unique([interviewId, panelId])
+}

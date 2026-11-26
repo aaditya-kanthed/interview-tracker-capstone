@@ -1,0 +1,179 @@
+/*
+  Tailwind source file. After editing, rebuild with:  npm run build:css
+  (or keep "npm run watch:css" running while you work)
+  The pages load the generated file css/output.css.
+*/
+@import 'tailwindcss';
+
+/* Scan pages and scripts for class names */
+@source '../*.html';
+@source '../js/*.js';
+
+/* Dark mode is switched on by adding class="dark" to <html> (see js/theme.js) */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: 'Segoe UI', system-ui, -apple-system, Roboto, 'Helvetica Neue', Arial, sans-serif;
+  /* Warm terracotta brand colour */
+  --color-brand-50: #fff6ef;
+  --color-brand-100: #fde9d9;
+  --color-brand-200: #f9d0b0;
+  --color-brand-300: #f4ad7c;
+  --color-brand-400: #ec8a4f;
+  --color-brand-500: #dc6b2f;
+  --color-brand-600: #c2561d;
+  --color-brand-700: #a14418;
+  --color-brand-900: #5e2a12;
+  /* Soft cream page background */
+  --color-paper: #fbf7f1;
+  --animate-toast-in: toast-in 0.25s ease-out;
+  --animate-fade-in: fade-in 0.2s ease-out;
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@layer base {
+  html {
+    @apply bg-paper text-stone-800 antialiased dark:bg-stone-950 dark:text-stone-200;
+    color-scheme: light;
+  }
+  html.dark {
+    color-scheme: dark;
+  }
+  [hidden] {
+    display: none !important;
+  }
+  input[type='date']::-webkit-calendar-picker-indicator,
+  input[type='datetime-local']::-webkit-calendar-picker-indicator {
+    @apply cursor-pointer dark:invert;
+  }
+}
+
+@layer components {
+  /* ---------- Buttons ---------- */
+  .btn {
+    @apply inline-flex cursor-pointer items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold transition
+      focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500
+      disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  .btn-primary {
+    @apply bg-brand-600 text-white shadow-sm hover:bg-brand-700;
+  }
+  .btn-secondary {
+    @apply border border-stone-300 bg-white text-stone-700 hover:bg-stone-50
+      dark:border-stone-700 dark:bg-stone-800 dark:text-stone-200 dark:hover:bg-stone-700;
+  }
+  .btn-danger {
+    @apply bg-rose-600 text-white shadow-sm hover:bg-rose-700;
+  }
+  .btn-success {
+    @apply bg-emerald-600 text-white shadow-sm hover:bg-emerald-700;
+  }
+  .btn-ghost {
+    @apply text-stone-600 hover:bg-stone-100 dark:text-stone-300 dark:hover:bg-stone-800;
+  }
+  .btn-sm {
+    @apply px-3 py-1.5 text-xs;
+  }
+
+  /* ---------- Cards ---------- */
+  .card {
+    @apply rounded-2xl border border-stone-200 bg-white p-6 shadow-sm dark:border-stone-800 dark:bg-stone-900;
+  }
+
+  /* ---------- Forms ---------- */
+  .label {
+    @apply mb-1.5 block text-sm font-medium text-stone-700 dark:text-stone-300;
+  }
+  .input {
+    @apply block w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 shadow-sm transition
+      placeholder:text-stone-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 focus:outline-none
+      disabled:bg-stone-100 disabled:text-stone-600
+      dark:border-stone-700 dark:bg-stone-800 dark:text-stone-100 dark:placeholder:text-stone-500
+      dark:disabled:bg-stone-800/60 dark:disabled:text-stone-300;
+  }
+  .field-hint {
+    @apply mt-1 text-xs text-stone-500 dark:text-stone-400;
+  }
+
+  /* ---------- Badges ---------- */
+  .badge {
+    @apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold whitespace-nowrap;
+  }
+  .badge-gray {
+    @apply bg-stone-100 text-stone-700 dark:bg-stone-800 dark:text-stone-300;
+  }
+  .badge-blue {
+    @apply bg-amber-100 text-amber-700 dark:bg-amber-500/15 dark:text-amber-300;
+  }
+  .badge-brand {
+    @apply bg-brand-100 text-brand-700 dark:bg-brand-500/15 dark:text-brand-200;
+  }
+  .badge-green {
+    @apply bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300;
+  }
+  .badge-red {
+    @apply bg-rose-100 text-rose-700 dark:bg-rose-500/15 dark:text-rose-300;
+  }
+  .badge-amber {
+    @apply bg-amber-100 text-amber-800 dark:bg-amber-500/15 dark:text-amber-300;
+  }
+  .badge-violet {
+    @apply bg-rose-100 text-rose-700 dark:bg-rose-500/15 dark:text-rose-300;
+  }
+
+  /* ---------- Tables ---------- */
+  .table {
+    @apply min-w-full divide-y divide-stone-200 text-sm dark:divide-stone-800;
+  }
+  .table th {
+    @apply bg-stone-50 px-4 py-3 text-left text-xs font-semibold tracking-wide text-stone-500 uppercase
+      dark:bg-stone-800/60 dark:text-stone-400;
+  }
+  .table td {
+    @apply px-4 py-3 align-middle;
+  }
+  .table tbody tr {
+    @apply transition hover:bg-stone-50 dark:hover:bg-stone-800/40;
+  }
+  .table tbody {
+    @apply divide-y divide-stone-100 dark:divide-stone-800;
+  }
+
+  /* ---------- Misc ---------- */
+  .link {
+    @apply font-medium text-brand-600 hover:text-brand-700 hover:underline dark:text-brand-400;
+  }
+  .muted {
+    @apply text-sm text-stone-500 dark:text-stone-400;
+  }
+  .nav-link {
+    @apply flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-stone-600 transition
+      hover:bg-stone-100 hover:text-stone-900 dark:text-stone-300 dark:hover:bg-stone-800 dark:hover:text-white;
+  }
+  .nav-link.active {
+    @apply bg-brand-50 text-brand-700 dark:bg-brand-500/15 dark:text-brand-200;
+  }
+  .skill-chip {
+    @apply inline-flex items-center gap-1 rounded-md bg-stone-100 px-2 py-1 text-xs font-medium text-stone-700
+      dark:bg-stone-800 dark:text-stone-300;
+  }
+}
