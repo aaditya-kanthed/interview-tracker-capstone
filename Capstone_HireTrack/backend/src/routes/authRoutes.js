@@ -58,4 +58,12 @@ router.post('/forgot-password', validate(s.forgotPasswordSchema), async (req, re
   });
 });
 
+// "Resend verification email" (shown on the login page when the email is not verified yet)
+router.post('/resend-verification', validate(s.forgotPasswordSchema), async (req, res) => {
+  await authService.resendVerification(req.validated.email);
+  res.json({
+    message: 'If this account still needs verifying, a new verification link has been sent.',
+  });
+});
+
 module.exports = router;

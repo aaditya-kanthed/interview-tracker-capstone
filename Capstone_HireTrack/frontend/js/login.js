@@ -45,6 +45,22 @@ form.addEventListener('submit', async (event) => {
     );
   } catch (err) {
     showError(err, form);
+    // Not verified yet: offer to send a fresh verification link
+    document.getElementById('resendBox').hidden = !/verify your email/i.test(err.message);
+  }
+});
+
+document.getElementById('resendBtn').addEventListener('click', async (e) => {
+  const email = form.email.value.trim();
+  if (!email) return;
+  try {
+    const { message } = await withBusy(e.currentTarget, () =>
+      api('/auth/resend-verification', { method: 'POST', body: { email } }),
+    );
+    toast(`${message} Check your inbox and spam folder.`);
+    document.getElementById('resendBox').hidden = true;
+  } catch (err) {
+    showError(err);
   }
 });
 

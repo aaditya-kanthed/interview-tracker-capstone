@@ -260,6 +260,47 @@ describe('requestPasswordReset (forgot password)', () => {
   });
 });
 
+describe('resendVerification', () => {
+  const HOUR = 60 * 60 * 1000;
+  const unverified = (extra = {}) => ({
+    id: 6,
+    email: 'neha@example.com',
+    fullName: 'Neha',
+    role: 'CANDIDATE',
+    isVerified: false,
+    passwordHash: 'hash',
+    tokenExpiresAt: new Date(Date.now() + 10 * HOUR), // old link sent 14 hours ago
+    ...extra,
+  });
+
+  test('sends a new 24-hour verification link', async () => {
+    prisma.user.findUnique.mockResolvedValue(unverified());
+    await authService.resendVerification('neha@example.com');
+    const { data } = prisma.user.update.mock.calls[0][0];
+    expect(emailService.sendVerification).toHaveBeenCalledWith(
+      'neha@example.com',
+      'Neha',
+      expect.any(String),
+    );
+    expect(data.tokenExpiresAt.getTime() - Date.now()).toBeGreaterThan(23.9 * HOUR);
+  });
+
+  test.each([
+    ['unknown email', null],
+    ['already verified', { isVerified: true }],
+    ['HR / panel accounts', { role: 'PANEL' }],
+    ['account created by HR (uses set-password link)', { passwordHash: null }],
+    [
+      'link sent less than 2 minutes ago',
+      { tokenExpiresAt: new Date(Date.now() + 24 * HOUR - 30000) },
+    ],
+  ])('does nothing for %s', async (_label, extra) => {
+    prisma.user.findUnique.mockResolvedValue(extra === null ? null : unverified(extra));
+    await authService.resendVerification('neha@example.com');
+    expect(emailService.sendVerification).not.toHaveBeenCalled();
+  });
+});
+
 describe('getAccount', () => {
   test('tells whether the user has a password and must change it', async () => {
     prisma.user.findUnique.mockResolvedValue({ passwordHash: 'h', mustChangePassword: true });
