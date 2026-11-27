@@ -106,7 +106,7 @@ Open `.env` and set:
 - `DATABASE_URL`: put your postgres password in place of `YOUR_DB_PASSWORD`.
 - `JWT_SECRET`: any long random string.
 - `SMTP_*`: see **Email setup** below.
-- `SEED_HR_EMAIL` / `SEED_HR_PASSWORD`: the first HR login.
+- `SEED_HR_NAME` / `SEED_HR_EMAIL` / `SEED_HR_PASSWORD`: the HR login and the name shown for it.
 
 ### Email setup (send from your Gmail)
 1. Turn on **2-Step Verification** for your Google account (Google Account → Security).
