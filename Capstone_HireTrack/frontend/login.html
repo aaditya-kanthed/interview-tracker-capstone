@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Log in | HireTrack</title>
+    <script src="js/theme.js"></script>
+    <link rel="stylesheet" href="css/output.css" />
+  </head>
+  <body class="min-h-screen">
+    <div class="grid min-h-screen lg:grid-cols-2">
+      <div id="authAside" class="contents"></div>
+      <div class="flex flex-col px-4 py-6 sm:px-10">
+        <div id="authTop"></div>
+        <main class="mx-auto flex w-full max-w-md flex-1 flex-col justify-center py-10">
+          <h1 class="text-3xl font-bold tracking-tight text-stone-900 dark:text-white">
+            Welcome back
+          </h1>
+          <p class="mt-2 text-stone-500 dark:text-stone-400">
+            Log in to continue to your dashboard.
+          </p>
+
+          <!-- Shown only when GOOGLE_CLIENT_ID is set on the server -->
+          <div id="googleBox" class="mt-8" hidden>
+            <div id="googleBtn" class="flex min-h-11 justify-center"></div>
+            <div class="mt-6 flex items-center gap-3 text-xs font-medium text-stone-400 uppercase">
+              <span class="h-px flex-1 bg-stone-200 dark:bg-night-700"></span>
+              or log in with email
+              <span class="h-px flex-1 bg-stone-200 dark:bg-night-700"></span>
+            </div>
+          </div>
+
+          <form id="loginForm" class="mt-6 space-y-5" novalidate>
+            <div>
+              <label class="label" for="email">Email</label>
+              <input
+                class="input"
+                id="email"
+                type="email"
+                name="email"
+                required
+                autocomplete="email"
+                placeholder="you@example.com"
+              />
+            </div>
+            <div>
+              <div class="mb-1.5 flex items-center justify-between">
+                <label class="label mb-0" for="password">Password</label>
+                <a href="forgot-password.html" class="link text-sm" id="forgotLink"
+                  >Forgot password?</a
+                >
+              </div>
+              <div class="relative">
+                <input
+                  class="input pr-16"
+                  id="password"
+                  type="password"
+                  name="password"
+                  required
+                  autocomplete="current-password"
+                />
+                <button
+                  type="button"
+                  id="showPassword"
+                  class="absolute inset-y-0 right-0 px-3 text-xs font-semibold text-brand-600 dark:text-brand-400"
+                >
+                  Show
+                </button>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary w-full py-2.5">Log in</button>
+          </form>
+          <p class="mt-8 text-center text-sm text-stone-500 dark:text-stone-400">
+            New candidate? <a href="register.html" class="link">Create an account</a>
+          </p>
+          <p class="mt-2 text-center text-sm">
+            <a href="index.html" class="link">Browse open jobs</a>
+          </p>
+        </main>
+      </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/login.js"></script>
+  </body>
+</html>

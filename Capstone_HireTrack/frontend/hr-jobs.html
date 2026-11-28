@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Job descriptions | HireTrack</title>
+    <script src="js/theme.js"></script>
+    <link rel="stylesheet" href="css/output.css" />
+  </head>
+  <body class="min-h-screen">
+    <main class="mx-auto max-w-7xl px-4 py-8 sm:px-6">
+      <div id="header"></div>
+      <div class="mb-4 flex gap-2" id="tabs"></div>
+      <div id="jobs" class="grid gap-4 md:grid-cols-2"></div>
+    </main>
+
+    <!-- Slide-over drawer with the job form -->
+    <div id="drawer" class="fixed inset-0 z-40" hidden>
+      <div
+        class="absolute inset-0 animate-fade-in bg-stone-900/50 backdrop-blur-sm"
+        data-close-drawer
+      ></div>
+      <div
+        class="absolute inset-y-0 right-0 flex w-full max-w-xl translate-x-full flex-col bg-white shadow-2xl transition-transform duration-300 dark:bg-night-800"
+        id="drawerPanel"
+      >
+        <div
+          class="flex items-center justify-between border-b border-stone-200 px-6 py-4 dark:border-night-600"
+        >
+          <h2 class="text-lg font-semibold text-stone-900 dark:text-white" id="formTitle">
+            New job description
+          </h2>
+          <button
+            type="button"
+            class="btn btn-ghost p-2"
+            data-close-drawer
+            aria-label="Close"
+            id="closeIcon"
+          ></button>
+        </div>
+        <form id="jobForm" class="flex-1 space-y-5 overflow-y-auto px-6 py-6" novalidate>
+          <input type="hidden" name="id" />
+          <div>
+            <label class="label" for="title">Job title *</label>
+            <input
+              class="input"
+              id="title"
+              name="title"
+              required
+              minlength="2"
+              maxlength="150"
+              placeholder="e.g. Java Backend Developer"
+            />
+          </div>
+          <div>
+            <label class="label" for="description">Job description *</label>
+            <textarea
+              class="input"
+              id="description"
+              name="description"
+              rows="5"
+              required
+              minlength="10"
+            ></textarea>
+          </div>
+          <div>
+            <label class="label" for="skillInput">Skills required *</label>
+            <div
+              class="flex min-h-11 flex-wrap items-center gap-1.5 rounded-lg border border-stone-300 bg-white px-2 py-1.5 focus-within:border-brand-500 focus-within:ring-2 focus-within:ring-brand-500/20 dark:border-night-500 dark:bg-night-700"
+              id="skillsBox"
+            >
+              <input
+                id="skillInput"
+                name="skills"
+                class="min-w-32 flex-1 border-0 bg-transparent p-1 text-sm outline-none"
+                placeholder="Type a skill and press Enter"
+              />
+            </div>
+            <p class="field-hint">Press Enter or comma after each skill.</p>
+          </div>
+          <div class="grid gap-5 sm:grid-cols-2">
+            <div>
+              <label class="label" for="minExperience">Min experience (yrs) *</label>
+              <input
+                class="input"
+                id="minExperience"
+                type="number"
+                name="minExperience"
+                min="0"
+                max="40"
+                required
+              />
+            </div>
+            <div>
+              <label class="label" for="maxExperience">Max experience (yrs) *</label>
+              <input
+                class="input"
+                id="maxExperience"
+                type="number"
+                name="maxExperience"
+                min="0"
+                max="40"
+                required
+              />
+            </div>
+            <div>
+              <label class="label" for="minSalary">Min salary (₹ per year) *</label>
+              <input class="input" id="minSalary" type="number" name="minSalary" min="0" required />
+            </div>
+            <div>
+              <label class="label" for="maxSalary">Max salary (₹ per year) *</label>
+              <input class="input" id="maxSalary" type="number" name="maxSalary" min="0" required />
+            </div>
+            <div>
+              <label class="label" for="location">Location *</label>
+              <input class="input" id="location" name="location" required minlength="2" />
+            </div>
+            <div>
+              <label class="label" for="jobType">Job type *</label>
+              <select class="input" id="jobType" name="jobType" required>
+                <option value="FULL_TIME">Full-time</option>
+                <option value="CONTRACT">Contract</option>
+                <option value="REMOTE">Remote</option>
+              </select>
+            </div>
+          </div>
+        </form>
+        <div
+          class="flex justify-end gap-2 border-t border-stone-200 px-6 py-4 dark:border-night-600"
+        >
+          <button type="button" class="btn btn-secondary" data-close-drawer>Cancel</button>
+          <button type="submit" form="jobForm" class="btn btn-primary">Save job</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/hr-jobs.js"></script>
+  </body>
+</html>

@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Candidate | HireTrack</title>
+    <script src="js/theme.js"></script>
+    <link rel="stylesheet" href="css/output.css" />
+  </head>
+  <body class="min-h-screen">
+    <main class="mx-auto max-w-7xl px-4 py-8 sm:px-6">
+      <a href="hr-dashboard.html" class="link mb-6 inline-flex items-center gap-1 text-sm"
+        >&larr; Back to dashboard</a
+      >
+      <div id="content"></div>
+    </main>
+
+    <!-- Moved into the right column by the script -->
+    <template id="scheduleTemplate">
+      <form id="scheduleForm" class="card space-y-4" novalidate>
+        <div>
+          <h3 class="text-base font-semibold text-stone-900 dark:text-white" id="scheduleTitle">
+            Schedule interview
+          </h3>
+          <p class="muted">The candidate and panel members get an email.</p>
+        </div>
+        <input type="hidden" name="round" />
+        <div>
+          <label class="label" for="scheduledAt">Date &amp; time *</label>
+          <input class="input" id="scheduledAt" type="datetime-local" name="scheduledAt" required />
+        </div>
+        <fieldset>
+          <legend class="label">
+            Panel members * <span class="font-normal text-stone-400">(choose 1 or 2)</span>
+          </legend>
+          <div id="panelChoices" class="space-y-2"></div>
+        </fieldset>
+        <div>
+          <label class="label" for="focusAreas">Focus areas *</label>
+          <textarea
+            class="input"
+            id="focusAreas"
+            name="focusAreas"
+            rows="3"
+            required
+            minlength="3"
+            placeholder="e.g. Core Java, OOP, SQL joins"
+          ></textarea>
+        </div>
+        <div>
+          <div class="mb-1.5 flex items-center justify-between gap-2">
+            <label class="label mb-0" for="meetingLink">Google Meet link</label>
+            <a
+              href="https://meet.google.com/new"
+              target="_blank"
+              rel="noopener"
+              class="link text-xs"
+              title="Opens Google Meet in a new tab. Copy the meeting link and paste it here."
+              >+ Create a Meet</a
+            >
+          </div>
+          <input
+            class="input"
+            id="meetingLink"
+            name="meetingLink"
+            type="url"
+            inputmode="url"
+            placeholder="https://meet.google.com/abc-defg-hij"
+          />
+          <p class="field-hint">
+            Optional. Click "Create a Meet", copy the link from Google Meet and paste it here. It is
+            emailed to the candidate and panel.
+          </p>
+        </div>
+        <button class="btn btn-primary w-full" type="submit">Schedule &amp; notify</button>
+      </form>
+    </template>
+
+    <template id="decisionTemplate">
+      <form id="decisionForm" class="card space-y-4" novalidate>
+        <div>
+          <h3 class="text-base font-semibold text-stone-900 dark:text-white">Final decision</h3>
+          <p class="muted">The candidate is in the HR round. Comments are required.</p>
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <label class="cursor-pointer">
+            <input type="radio" name="decision" value="SELECTED" class="peer sr-only" checked />
+            <span
+              class="flex items-center justify-center gap-2 rounded-lg border-2 border-stone-200 p-3 text-sm font-semibold transition peer-checked:border-emerald-500 peer-checked:bg-emerald-50 peer-checked:text-emerald-700 dark:border-night-500 dark:peer-checked:bg-emerald-500/10 dark:peer-checked:text-emerald-300"
+              >Select</span
+            >
+          </label>
+          <label class="cursor-pointer">
+            <input type="radio" name="decision" value="REJECTED" class="peer sr-only" />
+            <span
+              class="flex items-center justify-center gap-2 rounded-lg border-2 border-stone-200 p-3 text-sm font-semibold transition peer-checked:border-rose-500 peer-checked:bg-rose-50 peer-checked:text-rose-700 dark:border-night-500 dark:peer-checked:bg-rose-500/10 dark:peer-checked:text-rose-300"
+              >Reject</span
+            >
+          </label>
+        </div>
+        <div>
+          <label class="label" for="decisionComments">Comments *</label>
+          <textarea
+            class="input"
+            id="decisionComments"
+            name="comments"
+            rows="3"
+            required
+            minlength="5"
+          ></textarea>
+        </div>
+        <button class="btn btn-primary w-full" type="submit">Save final decision</button>
+      </form>
+    </template>
+
+    <script src="js/api.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/hr-candidate.js"></script>
+  </body>
+</html>

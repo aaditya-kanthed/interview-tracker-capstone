@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Panel members | HireTrack</title>
+    <script src="js/theme.js"></script>
+    <link rel="stylesheet" href="css/output.css" />
+  </head>
+  <body class="min-h-screen">
+    <main class="mx-auto max-w-7xl px-4 py-8 sm:px-6">
+      <div id="header"></div>
+      <div class="grid gap-6 lg:grid-cols-3">
+        <form id="panelForm" class="card h-fit space-y-4 lg:sticky lg:top-24" novalidate>
+          <div>
+            <h2 class="text-base font-semibold text-stone-900 dark:text-white">Add panel member</h2>
+            <p class="muted">
+              Activating a member emails them their login email and a temporary password.
+            </p>
+          </div>
+          <div>
+            <label class="label" for="fullName">Full name *</label>
+            <input class="input" id="fullName" name="fullName" required minlength="2" />
+          </div>
+          <div>
+            <label class="label" for="email">Email *</label>
+            <input class="input" id="email" type="email" name="email" required />
+          </div>
+          <div class="grid grid-cols-3 gap-3">
+            <div>
+              <label class="label" for="mobileCode">Code *</label>
+              <input class="input" id="mobileCode" name="mobileCode" value="+91" required />
+            </div>
+            <div class="col-span-2">
+              <label class="label" for="mobile">Mobile *</label>
+              <input
+                class="input"
+                id="mobile"
+                name="mobile"
+                required
+                pattern="\d{7,15}"
+                inputmode="numeric"
+              />
+            </div>
+          </div>
+          <div>
+            <label class="label" for="organization">Organization *</label>
+            <input class="input" id="organization" name="organization" required minlength="2" />
+          </div>
+          <div>
+            <label class="label" for="designation">Designation *</label>
+            <input
+              class="input"
+              id="designation"
+              name="designation"
+              required
+              minlength="2"
+              placeholder="e.g. Tech Lead"
+            />
+          </div>
+          <button type="submit" class="btn btn-primary w-full">Add panel member</button>
+        </form>
+
+        <section class="card p-0 lg:col-span-2">
+          <div
+            class="flex items-center justify-between border-b border-stone-200 px-6 py-4 dark:border-night-600"
+          >
+            <h2 class="text-base font-semibold text-stone-900 dark:text-white">Panel members</h2>
+            <span class="muted" id="count"></span>
+          </div>
+          <ul id="panels" class="divide-y divide-stone-100 dark:divide-night-600"></ul>
+        </section>
+      </div>
+    </main>
+    <script src="js/api.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/hr-panels.js"></script>
+  </body>
+</html>
